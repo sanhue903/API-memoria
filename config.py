@@ -24,7 +24,7 @@ class DevelopmentConfig(Config):
         SWAGGER_URL,
         API_URL,
         config={
-            'app_name': 'Aule API'
+            'app_name': 'botiquinAPI'
         }
     )
     

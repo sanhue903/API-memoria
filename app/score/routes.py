@@ -39,15 +39,15 @@ def parse_json2(scores, app, chapter, question) -> Any:
         for question_it in chapter_it.questions if len(question) == 0 else question:    
             for score in scores[:]:
                 score_data = {
-                    'chapter': chapter_it.id,
-                    'question': question_it.id,
+                    'student_id': score.student_id,
+                    'chapter_id': chapter_it.id,
+                    'question_id': question_it.id,
                     'answer': score.answer,
-                    'attempt': score.attempt,
-                    'date': score.date,
                     'is_correct': score.is_correct,
                     'seconds': score.seconds,
                     'session': score.session,
-                    'student_id': score.student_id
+                    'attempt': score.attempt,
+                    'date': score.date
                 }
                 if score.question_id == question_it.id:
                     results.append(score_data)

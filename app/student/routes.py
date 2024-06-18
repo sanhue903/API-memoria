@@ -14,6 +14,7 @@ def get_students_from_app(app_id):
     if app is None:
         return jsonify({'message': f'App with id {app_id} not found'}), 404
     
+    #cambiar id int por algo más seguro
     user_id = get_jwt_identity()
     user = db.session.scalar(db.select(User).where(User.id == user_id))
     if user is None:

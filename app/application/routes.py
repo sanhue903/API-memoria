@@ -12,7 +12,7 @@ from flask import jsonify, request
 def app_aplication():
     user = db.session.scalar(db.select(User).where(User.id == get_jwt_identity()))
     
-    if not user.admin:
+    if not user.is_admin:
         return jsonify({'message': 'Unauthorized'}), 403
     
     data = request.get_json()
@@ -45,7 +45,7 @@ def app_aplication():
 def get_application(app_id):
     user = db.session.scalar(db.select(User).where(User.id == get_jwt_identity()))
     
-    if not user.admin:
+    if not user.is_admin:
         return jsonify({'message': 'Unauthorized'}), 403
     
     app = db.session.scalar(db.select(Application).where(Application.id == app_id))

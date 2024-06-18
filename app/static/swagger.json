@@ -1,7 +1,7 @@
 {
    "swagger":"2.0",
    "info":{
-      "title":"Mi API Flask",
+      "title":"botiquinAPI",
       "version":"1.0"
    },
    "host":"localhost:5000",
@@ -23,19 +23,55 @@
          "description":"Operaciones relacionadas con las aulas"
       }
    ],
+
    "paths":{
-      "/apps/{mobile_app_id}/students":{
+      "/apps/{app_id}/students":{
          "get":{
             "tags":[
                "Students"
             ],
-            "summary":"Obtener todos los estudiantes de una aplicación móvil específica",
+            "summary":"Obtener todos los estudiantes de una aplicación",
             "parameters":[
                {
-                  "name":"mobile_app_id",
+                  "name":"app_id",
                   "in":"path",
                   "required":true,
                   "type":"string"
+               },
+               {
+                  "name":"page",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Número de página"
+               },
+               {
+                  "name":"limit",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Número de elementos por página"
+               },
+               {
+                  "name":"age",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por edad"
+               },
+               {
+                  "name":"age[gte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por edad mayor o igual a"
+               },
+               {
+                  "name":"age[lte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por edad menor o igual a"
                }
             ],
             "responses":{
@@ -43,40 +79,10 @@
                   "description":"Lista de estudiantes"
                },
                "404":{
-                  "description":"Aplicación móvil no encontrada"
-               }
-            }
-         }
-      },
-      "/apps/{mobile_app_id}/aules/{aule_id}/students":{
-         "get":{
-            "tags":[
-               "Students"
-            ],
-            "summary":"Obtener todos los estudiantes de una aula específica",
-            "parameters":[
-               {
-                  "name":"mobile_app_id",
-                  "in":"path",
-                  "required":true,
-                  "type":"string"
+                  "description":"Aplicación no encontrada"
                },
-               {
-                  "name":"aule_id",
-                  "in":"path",
-                  "required":true,
-                  "type":"string"
-               }
-            ],
-            "responses":{
-               "200":{
-                  "description":"Lista de estudiantes",
-                  "schema":{
-
-                  }
-               },
-               "404":{
-                  "description":"Aplicación móvil o Aula no encontrada"
+               "403":{
+                  "description":"No tienes permisos para acceder a esta información"
                }
             }
          },
@@ -84,22 +90,16 @@
             "tags":[
                "Students"
             ],
-            "summary":"Crear un nuevo estudiante en una aula específica",
+            "summary":"Crear un nuevo estudiante de una aplicación",
             "parameters":[
                {
-                  "name":"mobile_app_id",
+                  "name":"app_id",
                   "in":"path",
                   "required":true,
                   "type":"string"
                },
                {
-                  "name":"aule_id",
-                  "in":"path",
-                  "required":true,
-                  "type":"string"
-               },
-               {
-                  "name":"student",
+                  "name":"estudiante",
                   "in":"body",
                   "required":true,
                   "schema":{
@@ -112,32 +112,120 @@
                   "description":"Estudiante creado"
                },
                "404":{
-                  "description":"Aplicación móvil o Aula no encontrada"
+                  "description":"Aplicación no encontrada"
                }
             }
          }
       },
-      "/apps/{mobile_app_id}/aules/{aule_id}/students/scores":{
+      "/apps/{app_id}/students/{student_id}/scores":{
          "get":{
             "tags":[
                "Scores"
             ],
-            "summary":"Obtener puntajes de estudiantes",
-            "description":"Devuelve los puntajes de todos los estudiantes de una aula y aplicación móvil específicas.",
+            "summary":"Obtener puntajes de estudiantes o de un estudiante específico",
             "parameters":[
                {
-                  "name":"mobile_app_id",
-                  "in":"query",
+                  "name":"app_id",
+                  "in":"path",
                   "required":true,
-                  "description":"ID de la aplicación móvil",
                   "type":"string"
                },
                {
-                  "name":"aule_id",
+                  "name":"student_id",
+                  "in":"path",
+                  "required":false,
+                  "type":"integer"
+               },
+               {
+                  "name":"page",
                   "in":"query",
-                  "required":true,
-                  "description":"ID de la aula",
-                  "type":"string"
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Número de página"
+               },
+               {
+                  "name":"limit",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Número de elementos por página"
+               },
+               {
+                  "name":"age",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por edad"
+               },
+               {
+                  "name":"age[gte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por edad mayor o igual a"
+               },
+               {
+                  "name":"age[lte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por edad menor o igual a"
+               },
+               {
+                  "name":"chapter_id",
+                  "in":"query",
+                  "required":false,
+                  "type":"string",
+                  "description" : "Filtrar por ID de capitulo"
+               },
+               {
+                  "name":"question_id",
+                  "in":"query",
+                  "required":false,
+                  "type":"string",
+                  "description" : "Filtrar por ID de pregunta"
+               },
+               {
+                  "name":"attempt",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por intentos"
+               },
+               {
+                  "name":"attempt[gte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por intentos mayor o igual a"
+               },
+               {
+                  "name":"attempt[lte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por intentos menor o igual a"
+               },
+               {
+                  "name":"session",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por sesión"
+               },
+               {
+                  "name":"session[gte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por sesión mayor o igual a"
+               },
+               {
+                  "name":"session[lte]",
+                  "in":"query",
+                  "required":false,
+                  "type":"integer",
+                  "description" : "Filtrar por sesión menor o igual a"
                }
             ],
             "responses":{
@@ -155,8 +243,13 @@
                      }
                   }
                },
+               "400":{
+                  "description":"Filtro pregunta ingresado sin filtro capitulo"
+               },
+               "403":{
+                  "description":"No tienes permisos para acceder a esta información"},
                "404":{
-                  "description":"Aula o aplicación móvil no encontradas"
+                  "description":"Aplicación, Capitulo o Pregunta no encontrada"
                },
                "422":{
                   "description":"Parámetros inválidos"
@@ -167,11 +260,10 @@
             "tags":[
                "Scores"
             ],
-            "summary":"Crear puntaje de estudiante",
-            "description":"Crea un nuevo puntaje para un estudiante en una aula y aplicación móvil específicas.",
+            "summary":"Crear puntajes de estudiante",
             "parameters":[
                {
-                  "name":"mobile_app_id",
+                  "name":"app_id",
                   "in":"query",
                   "required":true,
                   "description":"ID de la aplicación móvil",
@@ -229,80 +321,12 @@
             }
          }
       },
-      "/apps/{mobile_app_id}/aules":{
-         "get":{
-            "tags":[
-               "Aules"
-            ],
-            "summary":"Obtener todas las aulas de una aplicación móvil específica",
-            "parameters":[
-               {
-                  "name":"mobile_app_id",
-                  "in":"path",
-                  "required":true,
-                  "type":"string"
-               }
-            ],
-            "responses":{
-               "200":{
-                  "description":"Lista de aulas",
-                  "schema":{
-                     "aules":{
-                        "type":"array",
-                        "items":{
-                           "$ref":"#/definitions/Aule"
-                        }
-                     }
-                  }
-               },
-               "404":{
-                  "description":"Aplicación móvil no encontrada"
-               }
-            }
-         },
-         "post":{
-            "tags":[
-               "Aules"
-            ],
-            "summary":"Crear una nueva aula en una aplicación móvil específica",
-            "parameters":[
-               {
-                  "name":"mobile_app_id",
-                  "in":"path",
-                  "required":true,
-                  "type":"string"
-               },
-               {
-                  "name":"aule",
-                  "in":"body",
-                  "required":true,
-                  "schema":{
-                     "$ref":"#/definitions/Aule"
-                  }
-               }
-            ],
-            "responses":{
-               "201":{
-                  "description":"Aula creada"
-               },
-               "404":{
-                  "description":"Aplicación móvil no encontrada"
-               }
-            }
-         }
-      }
-   },
+      
    "definitions":{
       "Student":{
          "type":"object",
          "properties":{
-            "first_name":{
-               "type":"string"
-            },
-            "last_name":{
-               "type":"string"
-            },
-            "last_name_2":{
+            "name":{
                "type":"string"
             },
             "age":{
@@ -313,38 +337,38 @@
       "GetScore":{
          "type":"object",
          "properties":{
-            "chapter":{
-               "type":"object",
-               "properties":{
-                  "id":{
-                     "type":"string"
-                  },
-                  "question":{
-                     "type":"array",
-                     "items":{
-                        "type":"object",
-                        "properties":{
-                           "id":{
-                              "type":"string"
-                           },
-                           "score":{
-                              "type":"array",
-                              "items":{
-                                 "type":"object",
-                                 "properties":{
-                                    "student_id":{
-                                       "type":"integer"
-                                    },
-                                    "miliseconds":{
-                                       "type":"integer"
-                                    },
-                                    "attempts":{
-                                       "type":"integer"
-                                    }
-                                 }
-                              }
-                           }
-                        }
+            "scores":{
+               "type":"array",
+               "items":{
+                  "type":"object",
+                  "properties":{
+                     "student_id": {
+                        "type":"integer"
+                     },
+                     "chapter_id":{
+                        "type": "string"
+                     },
+                     "question_id":{
+                        "type": "string"
+                     },
+                     "answer":{
+                        "type":"string"
+                     },
+                     "is_correct":{
+                        "type":"boolean"
+                     },
+                     "seconds":{
+                        "type":"float"
+                     },
+                     "attempt":{
+                        "type":"integer"
+                     },
+                     "session":{
+                        "type":"integer"
+                     },
+                     "date":{
+                        "type": "string",
+                        "format": "date-time"
                      }
                   }
                }
@@ -354,66 +378,34 @@
       "PostScore":{
          "type":"object",
          "properties":{
-            "student_id":{
-               "type":"integer"
-            },
-            "app_mobile":{
+            "chapter":{
                "type":"object",
                "properties":{
-                  "id":{
+                  "id": {
                      "type":"string"
                   },
-                  "chapter":{
-                     "type":"object",
-                     "properties":{
-                        "id":{
-                           "type":"string"
-                        },
-                        "question":{
-                           "type":"array",
-                           "items":{
-                              "type":"object",
-                              "properties":{
-                                 "id":{
-                                    "type":"string"
-                                 },
-                                 "score":{
-                                    "type":"object",
-                                    "properties":{
-                                       "miliseconds":{
-                                          "type":"integer"
-                                       },
-                                       "attempts":{
-                                          "type":"integer"
-                                       }
-                                    }
-                                 }
+                  "scores":{
+                     "type":"array",
+                     "items":{
+                        "type":"object",
+                          "properties":{
+                              "answer":{
+                                 "type":"string"
+                              },
+                              "seconds":{
+                                 "type":"float"
+                              },
+                              "is_correct":{
+                                 "type":"boolean"
+                              },
+                              "question_id":{
+                                 "type":"string"
                               }
                            }
                         }
                      }
-                  }
+                  }         
                }
-            }
-         }
-      },
-      "Aule":{
-         "type":"object",
-         "properties":{
-            "id":{
-               "type":"string"
-            },
-            "mobile_app_id":{
-               "type":"string"
-            },
-            "name":{
-               "type":"string"
-            },
-            "user_id":{
-               "type":"integer"
-            },
-            "school_id":{
-               "type":"integer"
             }
          }
       }
