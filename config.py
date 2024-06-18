@@ -16,7 +16,7 @@ class DevelopmentConfig(Config):
     load_dotenv(os.path.join(BASE_DIR, '.env'))
     DEBUG = True
     SECRET_KEY = 'dev'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')#os.environ.get('DATABASE_URL') 
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') 
     SWAGGER_URL = '/docs'
     API_URL = '/static/swagger.json'
     SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
