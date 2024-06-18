@@ -60,7 +60,11 @@ def parse_json2(scores, app, chapter, question) -> Any:
 @jwt_required(locations=['headers'])
 def get_scores_from_student(app_id: str, student_id: int):
     user_id = get_jwt_identity()    
-    user = db.session.scalar(db.select(User).where(User.id == user_id))
+
+    try:
+        user = db.session.scalar(db.select(User).where(User.id == user_id))
+    except Exception as e:
+        return jsonify({'message': 'invalid type'}), 400
     
     if user is None:
         return jsonify({'message': 'Unauthorized'}), 403

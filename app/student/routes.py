@@ -1,6 +1,7 @@
 from app.extensions import db
 from app.student import bp as app
 from app.models import Student, Application, User
+
 from app.schemas import StudentSchema
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -16,7 +17,12 @@ def get_students_from_app(app_id: str):
     
     #cambiar id int por algo más seguro
     user_id = get_jwt_identity()
-    user = db.session.scalar(db.select(User).where(User.id == user_id))
+    
+    try:
+        user = db.session.scalar(db.select(User).where(User.id == user_id))
+    except Exception as e:
+        return jsonify({'message': 'invalid type'}), 400
+
     if user is None:
         return jsonify({'message': 'Unauthorized'}), 403
     
