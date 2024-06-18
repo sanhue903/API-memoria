@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -5,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions import db
 
 class User(db.Model):
-    id:         Mapped[int] = mapped_column(primary_key=True)
+    id:         Mapped[uuid.UUID] = mapped_column(primary_key=True)
     email:      Mapped[str] = mapped_column(db.String(50), unique=True)
     password:   Mapped[str] = mapped_column()
     is_admin:   Mapped[bool] = mapped_column(db.Boolean, default=False)
@@ -13,6 +14,7 @@ class User(db.Model):
     aules: Mapped[List['Aule']] = db.relationship(backref='user', lazy=True)
     
     def __init__(self, email, password):
+        self.id = uuid.uuid4()
         self.email = email
         self.set_password(password)
         

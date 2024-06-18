@@ -58,7 +58,7 @@ def parse_json2(scores, app, chapter, question) -> Any:
 
 @app.route('/<student_id>/scores', methods=['GET'])
 @jwt_required(locations=['headers'])
-def get_scores_from_student(app_id, student_id):
+def get_scores_from_student(app_id: str, student_id: int):
     user_id = get_jwt_identity()    
     user = db.session.scalar(db.select(User).where(User.id == user_id))
     
@@ -184,7 +184,7 @@ def get_scores_from_student(app_id, student_id):
 
 @app.route('/scores', methods=['GET'])
 @jwt_required(locations=['headers'])
-def get_scores_from_students(app_id):
+def get_scores_from_students(app_id: str):
     user_id = get_jwt_identity()    
     user = db.session.scalar(db.select(User).where(User.id == user_id))
     if user is None:

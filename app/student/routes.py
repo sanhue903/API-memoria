@@ -9,7 +9,7 @@ from flask import jsonify, request
 
 @app.route('',methods=['GET'])
 @jwt_required(locations=['headers'])
-def get_students_from_app(app_id):
+def get_students_from_app(app_id: str):
     app = db.session.scalar(db.select(Application).where(Application.id == app_id))
     if app is None:
         return jsonify({'message': f'App with id {app_id} not found'}), 404
@@ -52,7 +52,7 @@ def get_students_from_app(app_id):
   
 @app.route('',methods=['POST'])    
 @jwt_required(locations=['headers'])
-def post_student(app_id):
+def post_student(app_id: str):
     if get_jwt_identity() != app_id:
         return jsonify({'message': 'Unauthorized'}), 403
     

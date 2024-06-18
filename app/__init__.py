@@ -6,7 +6,9 @@ from app.extensions import *
 
 def create_app(config_class: Config= DevelopmentConfig):
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    config = config_class()
+    print(config.__class__.__name__)
+    app.config.from_object(config)
     CORS(app)
 
     # Initialize Flask extensions here
@@ -44,9 +46,10 @@ def create_app(config_class: Config= DevelopmentConfig):
     app.register_blueprint(application_bp, url_prefix='/apps')
     
     ### Swagger ###
-    print("SWAGGER_URL: ", config_class.SWAGGER_URL)
-    app.register_blueprint(config_class.SWAGGER_BLUEPRINT, url_prefix=config_class.SWAGGER_URL)
-    print("tamos")
+    if type(config) == DevelopmentConfig:
+        print("SWAGGER_URL: ", config_class.SWAGGER_URL)
+        app.register_blueprint(config_class.SWAGGER_BLUEPRINT, url_prefix=config_class.SWAGGER_URL)
+        print("tamos")
 
     return app
 
