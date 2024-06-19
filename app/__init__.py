@@ -17,6 +17,7 @@ def create_app(config_class: Config= DevelopmentConfig):
     ma.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
     #scheduler.init_app(app) 
 
     
