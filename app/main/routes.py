@@ -1,6 +1,5 @@
 from app.main import bp as app
 from flask import jsonify, request, send_from_directory
-from flask_swagger import swagger
 
 @app.route('/', methods=['GET'])
 def test():

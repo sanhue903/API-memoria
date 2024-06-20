@@ -8,12 +8,6 @@ class Config(object):
     TESTING = False
     DEBUG = False
     
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
-    MAIL_USE_TLS = True
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    
 class ProductionConfig(Config):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')

@@ -53,6 +53,23 @@ def get_application(app_id):
     if app is None:
         return jsonify({'message': f'Application with id {app_id} not found'}), 404
     
-    access_token = create_access_token(identity=app.id, expires_delta=False)
+    #access_token = create_access_token(identity=app.id, expires_delta=False)
     
-    return jsonify({'token': access_token}), 200
+    #return jsonify({'token': access_token}), 200
+
+    json = {
+        'id': app.id,
+        'name': app.name,
+        'chapters': [{
+            'id': chapter.id,
+            'number': chapter.number,
+            'name': chapter.name,
+            'questions': [{
+                'id': question.id,
+                'number': question.number,
+                'text': question.text
+            } for question in chapter.questions]
+            } for chapter in app.chapters]
+    }
+
+    return jsonify(json), 200
