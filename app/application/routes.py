@@ -60,10 +60,12 @@ def get_application(app_id):
     json = {
         'id': app.id,
         'name': app.name,
+        'chapter_count': len(app.chapters),
         'chapters': [{
             'id': chapter.id,
             'number': chapter.number,
             'name': chapter.name,
+            'question_count': len(chapter.questions),
             'questions': [{
                 'id': question.id,
                 'number': question.number,
