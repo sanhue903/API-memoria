@@ -75,3 +75,5 @@ def get_application(app_id):
     }
 
     return jsonify(json), 200
+
+#TODO add update and delete routes
