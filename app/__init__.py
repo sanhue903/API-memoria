@@ -51,14 +51,5 @@ def create_app(config_class: Config= DevelopmentConfig):
 
 def create_database():
     from app.models import User, Student, Aule, Application, Chapter, Question, Score, AuleStudentRelationship
-    from flask_migrate import init, migrate, upgrade
         
     db.create_all() 
-    
-    if not os.path.exists('migrations'):    
-        init()
-        
-    migrate()
-    upgrade()
-
-    
