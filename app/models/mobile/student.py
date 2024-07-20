@@ -10,7 +10,8 @@ class Student(db.Model):
     name: Mapped[str] = mapped_column(db.String(50))
     age:  Mapped[int]
     session: Mapped[int] = mapped_column(default=0)
-    
+    last_chapter: Mapped[int] = mapped_column(default=0)    
+
     app_id: Mapped[str] = mapped_column(ForeignKey('application.id'), nullable=False)
 
     aules: Mapped[List['AuleStudentRelationship']] = db.relationship(backref='student', lazy=True)

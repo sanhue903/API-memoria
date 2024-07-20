@@ -17,11 +17,6 @@ def create_app(config_class: Config= DevelopmentConfig):
     ma.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
-    #scheduler.init_app(app) 
-
-    
-    
-    #scheduler.start()
     
     with app.app_context():
         create_database()
@@ -55,5 +50,11 @@ def create_app(config_class: Config= DevelopmentConfig):
 
 def create_database():
     from app.models import User, Student, Aule, Application, Chapter, Question, Score, AuleStudentRelationship
+    from flask_migrate import init, migrate, upgrade
     
     db.create_all() 
+    
+    migrate()
+    upgrade()
+
+    
