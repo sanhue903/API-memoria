@@ -55,8 +55,10 @@ def create_database():
         
     db.create_all() 
     
-    if os.path.exists('migrations'):    
-        migrate()
-        upgrade()
+    if not os.path.exists('migrations'):    
+        init()
+        
+    migrate()
+    upgrade()
 
     
