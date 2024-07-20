@@ -355,6 +355,11 @@ def post_student_scores(app_id, student_id):
     for score in validated_data['chapter']['scores']:
         if score['question_id'] not in [question.id for question in chapter.questions]:
             return jsonify({'message': f'Question with id  not found in chapter {chapter.id}'}), 404
+
+        chapter = db.session.scalar(db.select(Chapter).where(Chapter.id == validated_data['chapter']['id']))
+        if chapter.number > student.last_chapter:
+            student.last_chapter = chapter.number
+            
         
         last_attempt = db.session.scalar(db.select(Score).where(Score.student_id == student_id).where(Score.question_id == score['question_id']).order_by(Score.attempt.desc()).limit(1))
 
