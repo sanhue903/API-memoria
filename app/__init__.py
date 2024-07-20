@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from config import Config, DevelopmentConfig
+import os
 
 from app.extensions import *
 
@@ -51,10 +52,11 @@ def create_app(config_class: Config= DevelopmentConfig):
 def create_database():
     from app.models import User, Student, Aule, Application, Chapter, Question, Score, AuleStudentRelationship
     from flask_migrate import init, migrate, upgrade
-    
+        
     db.create_all() 
     
-    migrate()
-    upgrade()
+    if os.path.exists('migrations'):    
+        migrate()
+        upgrade()
 
     
