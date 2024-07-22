@@ -20,7 +20,7 @@ def get_students_from_app(app_id: str):
     
     try:
         user = db.session.scalar(db.select(User).where(User.id == user_id))
-    except Exception as e:
+    except Exception:
         return jsonify({'message': 'invalid type'}), 400
 
     if user is None:
@@ -55,6 +55,29 @@ def get_students_from_app(app_id: str):
     schema = StudentSchema(many=True)
 
     return jsonify({'students': schema.dump(students)}), 200
+
+@app.route('/<student_id>',methods=['GET'])
+@jwt_required(locations=['headers'])
+def get_student_from_app(app_id: str, student_id: str):
+    app = db.session.scalar(db.select(Application).where(Application.id == app_id))
+    if app is None:
+        return jsonify({'message': f'App with id {app_id} not found'}), 404
+    
+    #cambiar id int por algo más seguro
+    user_id = get_jwt_identity()
+    
+    try:
+        user = db.session.scalar(db.select(User).where(User.id == user_id))
+    except Exception:
+        return jsonify({'message': 'invalid type'}), 400
+
+    if user is None:
+        return jsonify({'message': 'Unauthorized'}), 403
+    
+    student = db.session.scalar(db.select(Student).where(Student.app_id == app_id).where(Student.id == student_id)) 
+    schema = StudentSchema()
+
+    return jsonify({'student': schema.dump(student)}), 200
   
 @app.route('',methods=['POST'])    
 @jwt_required(locations=['headers'])
